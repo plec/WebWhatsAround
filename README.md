@@ -1,3 +1,4 @@
+
 App Engine Java WhatsAround
 Copyright (C) 2010-2012 Google Inc.
 
@@ -22,3 +23,6 @@ For further information, consult the [Java App Engine](https://developers.google
 To see all the available goals for the App Engine plugin, run
 
     mvn help:describe -Dplugin=appengine
+
+
+Web app for WhatsAround
