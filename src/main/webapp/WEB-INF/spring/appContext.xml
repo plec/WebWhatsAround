@@ -18,5 +18,8 @@
 	<bean class="com.plec.whatsaround.service.POIService" id="poiService">
 		<property name="poiDao" ref="poiDao" />
 	</bean>
-	<bean class="com.plec.whatsaround.dao.POIDao" id="poiDao" />
+	<bean class="com.plec.whatsaround.dao.POIDao" id="poiDao" init-method="init">
+	    <property name="mongoDbUrl" value="${poi.mongoDb.url}"/>
+	    <property name="limit" value="${poi.max.result}"/>
+	</bean>
 </beans>

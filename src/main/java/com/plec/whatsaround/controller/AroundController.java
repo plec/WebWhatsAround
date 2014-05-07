@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.plec.whatsaround.populate.bean.POI;
@@ -32,11 +33,26 @@ public class AroundController {
 		LOGGER.info("INIT");
 		return "init";
 	}
-	@RequestMapping(value = "/getPoi/{lat}/{lng}/{radius}", method = RequestMethod.GET)
-	public @ResponseBody List<POI> getPois(@PathVariable String lat, @PathVariable String lng, @PathVariable String radius) {
+	@RequestMapping(value = "/getPois", method = RequestMethod.GET)
+	public @ResponseBody List<POI> getPois(@RequestParam("lat") String lat, @RequestParam("lng") String lng, @RequestParam("radius") String radius) {
 		LOGGER.info("GET POIs");
-		return poiService.getPoiNearMe(Double.parseDouble(lat), Double.parseDouble(lng), Integer.parseInt(radius));
+		return poiService.getPoisNearMe(Double.parseDouble(lat), Double.parseDouble(lng), Integer.parseInt(radius));
 	}
+
+	@RequestMapping(value = "/searchPoisByName", method = RequestMethod.GET)
+	public @ResponseBody List<POI> searchPoisByName(@RequestParam("q") String q) {
+		LOGGER.info("GET POIs");
+		return poiService.searchPoisByName(q);
+	}
+
+	
+	@RequestMapping(value = "/getPoi/{id}", method = RequestMethod.GET)
+	public @ResponseBody POI getPoi(@PathVariable("id") String id) {
+		LOGGER.info("GET POIs");
+		return poiService.getPoi(id);
+	}
+	
+	
 
 	public void setPoiService(POIService poiService) {
 		this.poiService = poiService;
