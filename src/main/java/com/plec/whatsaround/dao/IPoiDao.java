@@ -6,6 +6,10 @@ import com.plec.whatsaround.populate.bean.POI;
 
 public interface IPoiDao {
 	/**
+	 * Init method
+	 */
+	public void init();
+	/**
 	 * Get a by by source Id e.g. the id set in the import file
 	 * @param id the source id e.g. IPXXX
 	 * @return the Poi or null if not found

@@ -48,13 +48,13 @@ img
 <script
 	src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script>
-	var dev = true;
+	var dev = false;
 	var baseUrl;
 	
 	if (dev == true) {
 		baseUrl = "/WebWhatsAround";
 	} else {
-		baseUrl = "/";
+		baseUrl = "";
 	}
 	var iconBaseFile = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
 	

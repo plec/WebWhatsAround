@@ -21,7 +21,8 @@ public class POIDao implements IPoiDao {
 	private static final Logger LOGGER = Logger.getLogger(POIDao.class);
 
 	
-	private String mongoDbUrl = "mongodb://whatsaround:whatsaround@ds029630.mongolab.com:29630/whatsaroundbase";
+	//private String mongoDbUrl = "mongodb://whatsaround:whatsaround@ds029630.mongolab.com:29630/whatsaroundbase";
+	private String mongoDbUrl = "mongodb://whatsaround:whatsaround@ds039379.mongolab.com:39379/whatsaroundnextbase";
 	
 	private String MongoDBCollection = "POI";
 	
@@ -35,13 +36,18 @@ public class POIDao implements IPoiDao {
 	
 	public void init() {
 		try {
+			LOGGER.info("Init dao !");
+			LOGGER.info("mongoDbUrl" + mongoDbUrl);
 			MongoClientURI uri  = new MongoClientURI(mongoDbUrl);
+			
 	        client = new MongoClient(uri);
 	        db = client.getDB(uri.getDatabase());
+			LOGGER.info("mongoDbCollection" + MongoDBCollection );
 	        poiCollection = db.getCollection(MongoDBCollection);
+			LOGGER.info("Init dao done !");
 
 		} catch (UnknownHostException uhe) {
-			LOGGER.error("Error inserting pois : " + uhe.getMessage(), uhe);
+			LOGGER.error("Error init poi dao : " + uhe.getMessage(), uhe);
 			throw new RuntimeException(uhe.getMessage(), uhe);
 		}
 	}
@@ -93,6 +99,7 @@ public class POIDao implements IPoiDao {
 	 */
 	@Override
 	public List<POI> getPoiNearPoint(double lat, double lng, int radius) {
+		this.init();
 		List<POI> poisNearMe = new ArrayList<POI>();
 		LOGGER.info("Execute geo near request on mongodb");
 		long l = System.currentTimeMillis();

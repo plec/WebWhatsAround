@@ -39,16 +39,16 @@ public class AroundController {
 	public @ResponseBody
 	List<POI> searchPoisNearMe(@RequestParam("lat") String lat, @RequestParam("lng") String lng, @RequestParam("radius") String radius) {
 		LOGGER.info("GET POIs near " + lat + "/" + lng + " radius :" + radius);
-		//return poiService.getPoisNearMe(Double.parseDouble(lat), Double.parseDouble(lng), Integer.parseInt(radius));
-		return poiService.getPoisNearMeMock();
+		return poiService.getPoisNearMe(Double.parseDouble(lat), Double.parseDouble(lng), Integer.parseInt(radius));
+		//return poiService.getPoisNearMeMock();
 	}
 
 	@RequestMapping(value = "/searchPoisByName", method = RequestMethod.GET)
 	public @ResponseBody
 	List<POI> searchPoisByName(@RequestParam("q") String q) {
 		LOGGER.info("search POIs like '" + q + "'");
-		//return poiService.searchPoisByName(q);
-		return poiService.getPoisNearMeMock();
+		return poiService.searchPoisByName(q);
+		//return poiService.getPoisNearMeMock();
 	}
 
 	@RequestMapping(value = "/getPoi/{id}", method = RequestMethod.GET)

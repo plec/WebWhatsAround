@@ -16,10 +16,14 @@
 		</property>
 	</bean>
 	<bean class="com.plec.whatsaround.service.POIService" id="poiService">
-		<property name="poiDao" ref="poiDao" />
+		<property name="poiDao" ref="poiHttpDao" />
 	</bean>
 	<bean class="com.plec.whatsaround.dao.POIDao" id="poiDao" init-method="init">
 	    <property name="mongoDbUrl" value="${poi.mongoDb.url}"/>
+	    <property name="limit" value="${poi.max.result}"/>
+	</bean>
+	
+		<bean class="com.plec.whatsaround.dao.HttpPOIDao" id="poiHttpDao" >
 	    <property name="limit" value="${poi.max.result}"/>
 	</bean>
 </beans>

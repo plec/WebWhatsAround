@@ -1,18 +1,24 @@
 package com.plec.whatsaround.populate.bean;
 
-import java.util.Date;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+import com.google.appengine.repackaged.org.codehaus.jackson.annotate.JsonIgnore;
+import com.google.appengine.repackaged.org.codehaus.jackson.annotate.JsonProperty;
 import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
-import com.google.code.morphia.emul.org.bson.types.ObjectId;
 
 @Entity("poi")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class POI {
+	@JsonIgnore(value=true)
+	private String _id;
+	@JsonIgnore(value=true)
+	private String className;
 	/** POI's id */
 	private String sourceId;
 	/** POI's name */
 	private String name;
 	/** POI's Localisation */
+	@JsonProperty
 	private LatLng latlng = new LatLng();
 	/** POI's type */
 	private String type;
@@ -111,5 +117,17 @@ public class POI {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String get_id() {
+		return _id;
+	}
+	public void set_id(String _id) {
+		this._id = _id;
+	}
+	public String getClassName() {
+		return className;
+	}
+	public void setClassName(String className) {
+		this.className = className;
 	}
 }
