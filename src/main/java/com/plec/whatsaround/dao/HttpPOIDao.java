@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -55,21 +56,30 @@ public class HttpPOIDao implements IPoiDao {
 	
 	@Override
 	public List<POI> searchPoisByName(String query) {
-		StringBuilder  queryUrl = new StringBuilder();
-		queryUrl.append(MONGO_REST_API_URL);
-		
-		queryUrl.append("?q={\"text\":\"POI\",");
-		queryUrl.append(" \"search\":\"");
-		queryUrl.append(query);
-		queryUrl.append("\",");
-		queryUrl.append("\"language\":\"french\",");
-		queryUrl.append("\"limit\":\"");
-		queryUrl.append(limit);
-		queryUrl.append("\"");
-		queryUrl.append("}&");
-		queryUrl.append(API_KEY);
-		BufferedReader response = callHttpRestMongoApi(query.toString());
-		return convertPOIs(response);
+		try  {
+			StringBuilder  queryUrl = new StringBuilder();
+			queryUrl.append(MONGO_REST_API_URL);
+			
+			queryUrl.append("?q=");
+			StringBuilder jsonStream = new StringBuilder();
+			jsonStream.append("{\"text\":\"POI\",");
+			jsonStream.append(" \"search\":\"");
+			jsonStream.append(query);
+			jsonStream.append("\",");
+			jsonStream.append("\"language\":\"french\",");
+			jsonStream.append("\"limit\":\"");
+			jsonStream.append(limit);
+			jsonStream.append("\"");
+			jsonStream.append("}");
+			queryUrl.append(URLEncoder.encode(jsonStream.toString(), "UTF-8"));
+			queryUrl.append("&");
+			queryUrl.append(API_KEY);
+			BufferedReader response = callHttpRestMongoApi(queryUrl.toString());
+			return convertPOIs(response);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+		return null;
 	}
 	
 	@Override
