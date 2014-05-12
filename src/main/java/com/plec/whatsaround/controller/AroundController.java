@@ -35,9 +35,9 @@ public class AroundController {
 		return "init";
 	}
 
-	@RequestMapping(value = "/getPois", method = RequestMethod.GET)
+	@RequestMapping(value = "/searchPoisNearMe", method = RequestMethod.GET)
 	public @ResponseBody
-	List<POI> getPois(@RequestParam("lat") String lat, @RequestParam("lng") String lng, @RequestParam("radius") String radius) {
+	List<POI> searchPoisNearMe(@RequestParam("lat") String lat, @RequestParam("lng") String lng, @RequestParam("radius") String radius) {
 		LOGGER.info("GET POIs near " + lat + "/" + lng + " radius :" + radius);
 		//return poiService.getPoisNearMe(Double.parseDouble(lat), Double.parseDouble(lng), Integer.parseInt(radius));
 		return poiService.getPoisNearMeMock();

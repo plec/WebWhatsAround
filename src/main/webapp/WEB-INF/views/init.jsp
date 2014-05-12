@@ -1,8 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page session="false"%>
-<html>
+
+        
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>whatsAround</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- Bootstrap -->
 <link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
@@ -15,7 +19,9 @@ html,body,#map-canvas {
 	margin: 0px;
 	padding: 0px
 }
-
+.h6 {
+	text-align:center;
+}
 #panel {
 	position: absolute;
 	top: 5px;
@@ -26,102 +32,42 @@ html,body,#map-canvas {
 	padding: 5px;
 	border: 1px solid #999;
 }
+#detail {
+	border-bottom: thin;
+}
+img 
+{
+    max-width: none;
+}
 </style>
 <script src="resources/jquery.js"></script>
 <script src="resources/slider/bootstrap-slider.js"></script>
+<script src="resources/pois.js"></script>
 
 
 <script
 	src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script>
-var map;
-var geocoder;
-	function displayPoi(poi) {
-
-		var latLng = new google.maps.LatLng(poi.latlng.lat, poi.latlng.lng);
-
-		//create marker
-		var marker = new google.maps.Marker({
-			map : map,
-			position : latLng
-		});
-
-		var iconBaseFile = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
-
-		var typeColor = '0000FF';
-		if (poi.type == 'Musee') {
-			typeColor = '9A9AFF';
-		} else if (poi.type == 'MH') {
-			typeColor = 'FF971F';
-		}
-		//Ajout de la couleur en fonction du type
-		var iconFile = iconBaseFile + typeColor;
-
-		//set Image to marker
-		marker.setIcon(iconFile);
-
-		//create the div info content
-		var div = document.createElement('div');
-		var poiContent = '<div class="marker" >';
-		poiContent += '<H6><strong>' + poi.name + '</strong></h6>';
-		poiContent += '<p><strong><i>Description : </i></strong>' + poi.description + '</p>';
-		poiContent += '<p><strong><i>Adresse : </i></strong>' + poi.adresse + ' /<br/>'
-				+ poi.formattedAddress + '</p>';
-		poiContent += '<p><strong><i>Type : </i></strong>' + poi.type + '</p>';
-		poiContent += '<p><strong><i>Horaires : </i></strong>' + poi.horaires + '</p>';
-		poiContent += '</div>';
-		div.innerHTML = poiContent;
-
-		//make the div as info bulle
-		var poiInfoWindow = new google.maps.InfoWindow({
-			content : div
-		});
-
-		//add click envent
-		google.maps.event.addListener(marker, 'click', function() {
-			poiInfoWindow.open(map, marker);
-		});
-	}
-	function searchPoiAroundMe(lat, lng, radius) {
-		console.log("searchPoiAroundMe "+lat + "/" + lng + " radius :" +radius);
-		$.ajax({
-			url : "/getPois?lat=" + lat + "&lng=" + lng + "&radius=" + radius,
-			success : function(data) {
-				var dataLength = data.length;
-				for ( var i = 0; i < dataLength; i++) {
-					displayPoi(data[i]);
-				}
-			}
-		});
-	}
+	var dev = true;
+	var baseUrl;
 	
-	function searchPoiByName(query) {
-		console.log("searchPoisByName "+query);
-		$.ajax({
-			url : "/searchPoisByName?q=" + query,
-			success : function(data) {
-				var dataLength = data.length;
-				for ( var i = 0; i < dataLength; i++) {
-					displayPoi(data[i]);
-				}
-			}
-		});
+	if (dev == true) {
+		baseUrl = "/WebWhatsAround";
+	} else {
+		baseUrl = "/";
 	}
+	var iconBaseFile = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
 	
-	function searchPoi() {
-		var query = $('#querySearch').val();
-		if (query == "") {
-			searchPoiAroundMe(48.833, 2.333, $('#slider').val());
-		} else {
-			searchPoiByName(query);
-		}
-	}
-	
+	var map;
+	var geocoder;
+	var poisMarkers = {};
+	var pois = {};
 
 	function initialize() {
 		console.log("initialize");
 		geocoder = new google.maps.Geocoder();
 		var latlng = new google.maps.LatLng(48.833, 2.333);
+		pois = {};
 		var mapOptions = {
 			zoom : 15,
 			center : latlng
@@ -138,9 +84,11 @@ var geocoder;
 </script>
 </head>
 <body>
-	<h1>Voir les lieux intéressants autour de moi</h1>
-	<div id="map-canvas" style="height:80%; width:75%; position:absolute; top:100px; left:1%"></div>
-	<div id="legend-canvas" style="height:80%; width:20%; position:absolute; top:100px;  left:76%">
+	<h1 style="text-align:center;">Voir les lieux intéressants autour de moi</h1>
+	<div id="detailsContainer" style="width:20%; position:absolute; top:100px; left:1%;" ><fieldset><legend>Détails</legend></fieldset></div>
+	<div id="details" style="height:75%; width:20%; position:absolute; top:150px; left:1%; overflow:auto" ></div>
+	<div id="map-canvas" style="height:80%; width:55%; position:absolute; top:100px; left:21% "></div>
+	<div id="legend-canvas" style="height:80%; width:20%; position:absolute; top:100px;  left:76%;">
 	<fieldset>
 	<legend>Legend</legend>
 	<ul>
