@@ -7,7 +7,7 @@ import com.plec.whatsaround.populate.bean.POI;
 
 public class PoiDaoTest {
 	public static void main(String[] args) {
-		getPoiNearPoint();
+		searchPoiByName();
 	}
 	
 	public static void testPoiDao() {
@@ -23,7 +23,18 @@ public class PoiDaoTest {
 	
 	public static void getPoiNearPoint() {
 		HttpPOIDao dao = new HttpPOIDao();
+		dao.setProxyHost("proxy.culture.fr");
+		dao.setProxyPort("8000");
+		dao.init();
 		List<POI> pois = dao.getPoiNearPoint(48.833,2.333,100);
+		System.out.println(pois.size());
+	}
+	public static void searchPoiByName() {
+		HttpPOIDao dao = new HttpPOIDao();
+		dao.setProxyHost("proxy.culture.fr");
+		dao.setProxyPort("8000");
+		dao.init();
+		List<POI> pois = dao.searchPoisByName("catacombes");
 		System.out.println(pois.size());
 	}
 	

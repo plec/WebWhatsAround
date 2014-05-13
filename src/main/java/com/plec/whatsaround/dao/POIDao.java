@@ -16,6 +16,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.plec.whatsaround.populate.bean.LatLng;
 import com.plec.whatsaround.populate.bean.POI;
+import com.plec.whatsaround.populate.bean.POIConverter;
 
 public class POIDao implements IPoiDao {
 	private static final Logger LOGGER = Logger.getLogger(POIDao.class);
@@ -60,7 +61,7 @@ public class POIDao implements IPoiDao {
 		DBObject result = poiCollection.findOne(new BasicDBObject("sourceId", id));
 		if (result != null) {
 			LOGGER.info("POI found: " + id); 
-			return convert(result);
+			return POIConverter.convertDBObjectToPoi(result);
 		}
 		LOGGER.warn("no POI match ! "); 
 		return null;
@@ -86,7 +87,7 @@ public class POIDao implements IPoiDao {
 	    	if (results.size() > 0) {
 		    	LOGGER.info("Request executed on MongoDB on " + (System.currentTimeMillis() - l) + "ms " + results.size() + " results");
 		    	for (DBObject curPoi : results) {
-		    		pois.add(convert(curPoi));
+		    		pois.add(POIConverter.convertDBObjectToPoi(curPoi));
 		    	}
 	    	}
 	    } else {
@@ -117,25 +118,13 @@ public class POIDao implements IPoiDao {
 			LOGGER.info("Request executed on MongoDB on " + (System.currentTimeMillis() - l) + "ms " + result.count() + " results");
 			while (result.hasNext()) {
 				DBObject curPoi = result.next();
-				poisNearMe.add(convert(curPoi));
+				poisNearMe.add(POIConverter.convertDBObjectToPoi(curPoi));
 			}
 		}
         LOGGER.info("NB result : " + result.count());
 		return poisNearMe;
 	}
-	private POI convert(DBObject dbo) {
-		POI poi = new POI();
-		poi.setAdresse((String)dbo.get("adresse"));
-		poi.setFormattedAddress((String)dbo.get("formattedAddress"));
-		poi.setDescription((String)dbo.get("description"));
-		poi.setName((String)dbo.get("name"));
-		poi.setType((String)dbo.get("type"));
-		
-		poi.setLatlng(new LatLng());
-		poi.getLatlng().setLat((Double) ((DBObject)dbo.get("latlng")).get("lat"));
-		poi.getLatlng().setLat((Double) ((DBObject)dbo.get("latlng")).get("lng"));
-		return poi;
-	}
+
 	/**
 	 * @param limit the limit to set
 	 */

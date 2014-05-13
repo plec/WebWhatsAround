@@ -14,6 +14,19 @@
 		div.innerHTML += poiDetails;
 
 	}
+	function reset() {
+		console.log("reset all");
+		//reset details div
+		var div = $('#details')[0];
+		div.innerHTML = '';
+		
+		//reset markers
+		 for (var i = 0; i < poisMarkers.length; i++ ) {
+			 console.log("reset one poi");
+			 poisMarkers[i].setMap(null);
+		 }
+		 poisMarkers.length = 0;
+	}
 	function selectMarker(poiId) {
 		console.log("change marker for " + poiId);
 		var currentPoi = pois[poiId];
@@ -99,6 +112,7 @@
 	}
 	
 	function searchPoiByName(query) {
+		reset();
 		var urlToCall = baseUrl + "/searchPoisByName?q=" + query;
 		console.log(urlToCall);
 		$.ajax({

@@ -23,7 +23,9 @@
 	    <property name="limit" value="${poi.max.result}"/>
 	</bean>
 	
-		<bean class="com.plec.whatsaround.dao.HttpPOIDao" id="poiHttpDao" >
+	<bean class="com.plec.whatsaround.dao.HttpPOIDao" id="poiHttpDao" init-method="init">
 	    <property name="limit" value="${poi.max.result}"/>
-	</bean>
+	    <property name="proxyHost" value="${poi.proxy.host}" />
+	    <property name="proxyPort" value="${poi.proxy.port}" />
+	   </bean>
 </beans>

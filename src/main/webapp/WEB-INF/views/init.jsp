@@ -48,7 +48,7 @@ img
 <script
 	src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script>
-	var dev = false;
+	var dev = true;
 	var baseUrl;
 	
 	if (dev == true) {
