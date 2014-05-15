@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.plec.whatsaround.dao.IPoiDao;
-import com.plec.whatsaround.populate.bean.LatLng;
 import com.plec.whatsaround.populate.bean.POI;
 
 public class POIService {

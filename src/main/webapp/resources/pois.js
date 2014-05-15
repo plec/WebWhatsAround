@@ -21,11 +21,11 @@
 		div.innerHTML = '';
 		
 		//reset markers
-		 for (var i = 0; i < poisMarkers.length; i++ ) {
+		 for (var i = 0; i < markersArray.length; i++ ) {
 			 console.log("reset one poi");
-			 poisMarkers[i].setMap(null);
+			 markersArray[i].setMap(null);
 		 }
-		 poisMarkers.length = 0;
+		 markersArray.length = 0;
 	}
 	function selectMarker(poiId) {
 		console.log("change marker for " + poiId);
@@ -68,6 +68,7 @@
 		//set Image to marker
 		marker.setIcon(iconFile);
 		poisMarkers[poi.sourceId] = marker;
+		markersArray.push(marker);
 		//create the div info content
 		var poiContent = '<div id="content" class="marker" >';
 		poiContent += '<div id="siteNotice">';

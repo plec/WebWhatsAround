@@ -5,7 +5,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>whatsAround</title>
+<title>Autour de moi</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- Bootstrap -->
 <link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"
@@ -62,6 +62,7 @@ img
 	var geocoder;
 	var poisMarkers = {};
 	var pois = {};
+	var markersArray = new Array();
 
 	function initialize() {
 		console.log("initialize");
